@@ -1,17 +1,60 @@
-import { Booking, DemoStats, TimeSlot } from '@/types'
+import { Booking, DemoStats, Profile, TimeSlot } from '@/types'
 import { format, subDays, addDays } from 'date-fns'
+
+const demoProfiles: Profile[] = [
+  {
+    id: 'profile-1',
+    email: 'arjun@example.com',
+    full_name: 'Arjun Sharma',
+    avatar_url: null,
+    role: 'user',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'profile-2',
+    email: 'priya@example.com',
+    full_name: 'Priya Rajan',
+    avatar_url: null,
+    role: 'user',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'profile-3',
+    email: 'karthik@example.com',
+    full_name: 'Karthik Suresh',
+    avatar_url: null,
+    role: 'user',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'profile-4',
+    email: 'meera@example.com',
+    full_name: 'Meera Nair',
+    avatar_url: null,
+    role: 'user',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'profile-5',
+    email: 'vikram@example.com',
+    full_name: 'Vikram Das',
+    avatar_url: null,
+    role: 'user',
+    created_at: new Date().toISOString(),
+  },
+]
 
 export const DEMO_TURF = {
   id: 'demo-turf-1',
-  name: 'GreenField Sports Arena',
-  description: 'Premium artificial turf facility with floodlights, changing rooms, and a café. The finest sports experience in the city.',
+  name: '7 NENI TURF',
+  description: 'Premium dual-sport turf in Chennai for cricket and football with neon-lit match nights, instant online booking, floodlights, and a champion-inspired arena atmosphere.',
   location: 'Anna Nagar, Chennai, Tamil Nadu',
   sports: ['cricket', 'football'] as const,
   price_per_hour: 800,
   images: [
-    'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=1200',
-    'https://images.unsplash.com/photo-1431324155629-1a6dae1434a6?w=1200',
-    'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200',
+    '/images/neni-turf-poster.jpeg',
+    '/images/neni-turf-neon-sign.jpeg',
+    '/images/neni-turf-poster.jpeg',
   ],
   is_active: true,
   created_at: new Date().toISOString(),
@@ -35,7 +78,7 @@ export const DEMO_BOOKINGS: Partial<Booking>[] = [
     end_time: '08:00',
     amount: 800,
     status: 'confirmed',
-    profile: { full_name: 'Arjun Sharma', email: 'arjun@example.com' } as any,
+    profile: demoProfiles[0],
   },
   {
     id: 'bk-002',
@@ -45,7 +88,7 @@ export const DEMO_BOOKINGS: Partial<Booking>[] = [
     end_time: '10:00',
     amount: 800,
     status: 'confirmed',
-    profile: { full_name: 'Priya Rajan', email: 'priya@example.com' } as any,
+    profile: demoProfiles[1],
   },
   {
     id: 'bk-003',
@@ -55,7 +98,7 @@ export const DEMO_BOOKINGS: Partial<Booking>[] = [
     end_time: '12:00',
     amount: 800,
     status: 'confirmed',
-    profile: { full_name: 'Karthik Suresh', email: 'karthik@example.com' } as any,
+    profile: demoProfiles[2],
   },
   {
     id: 'bk-004',
@@ -65,7 +108,7 @@ export const DEMO_BOOKINGS: Partial<Booking>[] = [
     end_time: '17:00',
     amount: 800,
     status: 'confirmed',
-    profile: { full_name: 'Meera Nair', email: 'meera@example.com' } as any,
+    profile: demoProfiles[3],
   },
   {
     id: 'bk-005',
@@ -75,7 +118,7 @@ export const DEMO_BOOKINGS: Partial<Booking>[] = [
     end_time: '09:00',
     amount: 800,
     status: 'confirmed',
-    profile: { full_name: 'Vikram Das', email: 'vikram@example.com' } as any,
+    profile: demoProfiles[4],
   },
 ]
 
@@ -89,8 +132,6 @@ export function generateTimeSlots(date: string): TimeSlot[] {
     const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`
 
     let status: TimeSlot['status'] = 'available'
-
-    // Demo: make some slots booked
     const bookedHours = isToday ? [7, 9, 11, 14, 18, 20] : [8, 12, 16, 19]
     const blockedHours = [6, 22]
 

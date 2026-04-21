@@ -1,26 +1,41 @@
 'use client'
 
 import { useState } from 'react'
+import { addDays, format, subDays } from 'date-fns'
 import { motion } from 'framer-motion'
-import { format, subDays, addDays } from 'date-fns'
 import {
-  TrendingUp, Calendar, IndianRupee, Users, Settings,
-  BarChart2, List, Shield, Zap, CheckCircle,
-  Clock, Download, ToggleLeft, ToggleRight, RefreshCw,
-  ChevronRight, Menu, X
+  BarChart2,
+  CheckCircle,
+  Clock,
+  Download,
+  List,
+  Menu,
+  RefreshCw,
+  Settings,
+  Shield,
+  ToggleLeft,
+  ToggleRight,
+  TrendingUp,
+  X,
 } from 'lucide-react'
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts'
-import toast from 'react-hot-toast'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 import { formatTime } from '@/lib/utils'
-import dynamic from 'next/dynamic'
 
-const ThreeBackground = dynamic(() => import('@/components/ThreeBackground'), { ssr: false })
-
-// ── Demo Data ──────────────────────────────────────────────
 const WEEKLY = [
   { day: 'Mon', revenue: 52000, bookings: 65 },
   { day: 'Tue', revenue: 48000, bookings: 60 },
@@ -31,113 +46,117 @@ const WEEKLY = [
   { day: 'Sun', revenue: 58000, bookings: 73 },
 ]
 
-const MONTHLY = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => ({
-  month: m,
-  revenue: [180000,210000,195000,230000,215000,248000,225000,260000,278000,245000,290000,310000][i],
+const MONTHLY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, index) => ({
+  month,
+  revenue: [180000, 210000, 195000, 230000, 215000, 248000, 225000, 260000, 278000, 245000, 290000, 310000][index],
 }))
 
 const SPORT_PIE = [
-  { name: 'Cricket 🏏', value: 486, color: '#f59e0b' },
-  { name: 'Football ⚽', value: 361, color: '#22c55e' },
+  { name: 'Cricket 🏏', value: 486, color: '#f97316' },
+  { name: 'Football ⚽', value: 361, color: '#3b82f6' },
 ]
 
 const ALL_BOOKINGS = [
-  { id:'GF7X2K9A', name:'Arjun Krishnamurthy', email:'arjun@gmail.com',   sport:'cricket',  date:format(new Date(),'yyyy-MM-dd'),          start:'07:00', amount:800, status:'confirmed' },
-  { id:'GF3M8P1Q', name:'Priya Raghavendra',   email:'priya@gmail.com',   sport:'football', date:format(new Date(),'yyyy-MM-dd'),          start:'09:00', amount:800, status:'confirmed' },
-  { id:'GF5N2R7T', name:'Karthik Sundarajan',  email:'karthik@gmail.com', sport:'cricket',  date:format(new Date(),'yyyy-MM-dd'),          start:'11:00', amount:800, status:'confirmed' },
-  { id:'GF9C4L6B', name:'Meera Natarajan',     email:'meera@gmail.com',   sport:'football', date:format(addDays(new Date(),1),'yyyy-MM-dd'), start:'16:00', amount:800, status:'confirmed' },
-  { id:'GF1D8H3Z', name:'Vikram Subramaniam',  email:'vikram@gmail.com',  sport:'cricket',  date:format(subDays(new Date(),1),'yyyy-MM-dd'), start:'08:00', amount:800, status:'confirmed' },
-  { id:'GF6W5J2V', name:'Ravi Kumar',          email:'ravi@gmail.com',    sport:'football', date:format(subDays(new Date(),2),'yyyy-MM-dd'), start:'14:00', amount:800, status:'cancelled' },
-  { id:'GF4E9Q8N', name:'Sunita Chandrasekhar',email:'sunita@gmail.com',  sport:'cricket',  date:format(addDays(new Date(),2),'yyyy-MM-dd'), start:'10:00', amount:800, status:'confirmed' },
-  { id:'GF2L7K5R', name:'Deepak Rajendran',    email:'deepak@gmail.com',  sport:'football', date:format(new Date(),'yyyy-MM-dd'),          start:'18:00', amount:800, status:'confirmed' },
+  { id: 'NT7X2K9A', name: 'Arjun Krishnamurthy', email: 'arjun@gmail.com', sport: 'cricket', date: format(new Date(), 'yyyy-MM-dd'), start: '07:00', amount: 800, status: 'confirmed' },
+  { id: 'NT3M8P1Q', name: 'Priya Raghavendra', email: 'priya@gmail.com', sport: 'football', date: format(new Date(), 'yyyy-MM-dd'), start: '09:00', amount: 800, status: 'confirmed' },
+  { id: 'NT5N2R7T', name: 'Karthik Sundarajan', email: 'karthik@gmail.com', sport: 'cricket', date: format(new Date(), 'yyyy-MM-dd'), start: '11:00', amount: 800, status: 'confirmed' },
+  { id: 'NT9C4L6B', name: 'Meera Natarajan', email: 'meera@gmail.com', sport: 'football', date: format(addDays(new Date(), 1), 'yyyy-MM-dd'), start: '16:00', amount: 800, status: 'confirmed' },
+  { id: 'NT1D8H3Z', name: 'Vikram Subramaniam', email: 'vikram@gmail.com', sport: 'cricket', date: format(subDays(new Date(), 1), 'yyyy-MM-dd'), start: '08:00', amount: 800, status: 'confirmed' },
+  { id: 'NT6W5J2V', name: 'Ravi Kumar', email: 'ravi@gmail.com', sport: 'football', date: format(subDays(new Date(), 2), 'yyyy-MM-dd'), start: '14:00', amount: 800, status: 'cancelled' },
+  { id: 'NT4E9Q8N', name: 'Sunita Chandrasekhar', email: 'sunita@gmail.com', sport: 'cricket', date: format(addDays(new Date(), 2), 'yyyy-MM-dd'), start: '10:00', amount: 800, status: 'confirmed' },
+  { id: 'NT2L7K5R', name: 'Deepak Rajendran', email: 'deepak@gmail.com', sport: 'football', date: format(new Date(), 'yyyy-MM-dd'), start: '18:00', amount: 800, status: 'confirmed' },
 ]
 
-const TODAY_SCHEDULE = ALL_BOOKINGS.filter(b => b.date === format(new Date(), 'yyyy-MM-dd'))
+const TODAY_SCHEDULE = ALL_BOOKINGS.filter((booking) => booking.date === format(new Date(), 'yyyy-MM-dd'))
 
 type Tab = 'overview' | 'bookings' | 'slots' | 'settings'
 
 const NAV_ITEMS: { id: Tab; label: string; icon: typeof BarChart2 }[] = [
-  { id: 'overview',  label: 'Overview',      icon: BarChart2 },
-  { id: 'bookings',  label: 'Bookings',      icon: List },
-  { id: 'slots',     label: 'Slot Manager',  icon: Clock },
-  { id: 'settings',  label: 'Settings',      icon: Settings },
+  { id: 'overview', label: 'Overview', icon: BarChart2 },
+  { id: 'bookings', label: 'Bookings', icon: List },
+  { id: 'slots', label: 'Slot Manager', icon: Clock },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ]
 
-// ── Custom tooltip ─────────────────────────────────────────
-const ChartTip = ({ active, payload, label }: any) => {
+type ChartTipProps = {
+  active?: boolean
+  payload?: Array<{ value?: number }>
+  label?: string
+}
+
+function ChartTip({ active, payload, label }: ChartTipProps) {
   if (!active || !payload?.length) return null
+
   return (
     <div className="bg-[#181b27] border border-white/[0.08] rounded-xl px-3 py-2.5 text-xs shadow-xl">
       <p className="text-slate-400 mb-1">{label}</p>
-      <p className="font-bold text-green-400">₹{Number(payload[0]?.value).toLocaleString('en-IN')}</p>
+      <p className="font-bold text-blue-300">₹{Number(payload[0]?.value).toLocaleString('en-IN')}</p>
     </div>
   )
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function AdminPage() {
-  const [tab, setTab]               = useState<Tab>('overview')
-  const [chartView, setChartView]   = useState<'weekly'|'monthly'>('weekly')
-  const [sportFilter, setSportFilter] = useState<'all'|'cricket'|'football'>('all')
-  const [turfOpen, setTurfOpen]     = useState(true)
+  const [tab, setTab] = useState<Tab>('overview')
+  const [chartView, setChartView] = useState<'weekly' | 'monthly'>('weekly')
+  const [sportFilter, setSportFilter] = useState<'all' | 'cricket' | 'football'>('all')
+  const [turfOpen, setTurfOpen] = useState(true)
   const [blockedHours, setBlockedHours] = useState<number[]>([6, 22])
-  const [openTime, setOpenTime]     = useState('06:00')
-  const [closeTime, setCloseTime]   = useState('23:00')
-  const [duration, setDuration]     = useState(60)
-  const [saving, setSaving]         = useState(false)
+  const [openTime, setOpenTime] = useState('06:00')
+  const [closeTime, setCloseTime] = useState('23:00')
+  const [duration, setDuration] = useState(60)
+  const [saving, setSaving] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const filtered = ALL_BOOKINGS.filter(b => sportFilter === 'all' || b.sport === sportFilter)
+  const filtered = ALL_BOOKINGS.filter((booking) => sportFilter === 'all' || booking.sport === sportFilter)
 
   const handleSave = async () => {
     setSaving(true)
-    await new Promise(r => setTimeout(r, 1200))
+    await new Promise((resolve) => setTimeout(resolve, 1200))
     setSaving(false)
     toast.success('Settings saved! ✓')
   }
 
-  const toggleHour = (h: number) => {
-    setBlockedHours(prev =>
-      prev.includes(h) ? prev.filter(x => x !== h) : [...prev, h]
-    )
-    toast.success(blockedHours.includes(h) ? `${h}:00 Unblocked` : `${h}:00 Blocked`)
+  const toggleHour = (hour: number) => {
+    setBlockedHours((current) => current.includes(hour) ? current.filter((item) => item !== hour) : [...current, hour])
+    toast.success(blockedHours.includes(hour) ? `${hour}:00 Unblocked` : `${hour}:00 Blocked`)
   }
 
   const kpis = [
-    { label: 'Total Bookings',   value: '847',         sub: '+12% this month', color: 'text-white' },
-    { label: "Today's Bookings", value: '12',           sub: '4 slots remaining',   color: 'text-blue-400' },
-    { label: 'Total Revenue',    value: '₹6,78,400',   sub: 'All time',        color: 'text-green-400' },
-    { label: 'Active Users',     value: '512',          sub: '+28 this week',  color: 'text-purple-400' },
+    { label: 'Total Bookings', value: '847', sub: '+12% this month', color: 'text-slate-100' },
+    { label: "Today's Bookings", value: '12', sub: '4 slots remaining', color: 'text-blue-300' },
+    { label: 'Total Revenue', value: '₹6,78,400', sub: 'All time', color: 'text-blue-400' },
+    { label: 'Active Users', value: '512', sub: '+28 this week', color: 'text-orange-300' },
   ]
+  const revenueChartData = chartView === 'weekly'
+    ? WEEKLY.map(({ day, revenue }) => ({ label: day, revenue }))
+    : MONTHLY.map(({ month, revenue }) => ({ label: month, revenue }))
 
   return (
     <div className="min-h-screen bg-bg text-white flex">
-
-      {/* ── SIDEBAR ── */}
-      {/* Desktop */}
       <aside className="hidden lg:flex w-60 flex-col fixed inset-y-0 left-0 bg-[#0c0e15] border-r border-white/[0.06] z-40">
         <div className="p-5 border-b border-white/[0.06]">
-          <Link href="/" className="flex items-center gap-2.5 mb-3">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-              <span className="text-black font-black text-xs">GF</span>
+          <Link href="/" className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 rounded-xl bg-[linear-gradient(135deg,#2563eb,#f97316)] flex items-center justify-center shadow-[0_8px_24px_rgba(37,99,235,0.25)]">
+              <span className="text-white font-black text-xs">7★</span>
             </div>
-            <span className="font-bold text-base text-green-grad" style={{ fontFamily: 'Space Grotesk' }}>GreenField</span>
+            <div>
+              <div className="font-bold text-base text-neni-grad" style={{ fontFamily: 'Space Grotesk' }}>NENI TURF</div>
+              <div className="text-[10px] uppercase tracking-[0.22em] text-slate-600">Admin Console</div>
+            </div>
           </Link>
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20 w-fit">
-            <Shield className="w-3 h-3 text-green-400" />
-            <span className="text-green-400 text-[10px] font-bold tracking-widest uppercase">Admin Panel</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 w-fit">
+            <Shield className="w-3 h-3 text-blue-300" />
+            <span className="text-blue-300 text-[10px] font-bold tracking-widest uppercase">Admin Panel</span>
           </div>
         </div>
 
         <nav className="flex-1 p-3 space-y-0.5">
-          {NAV_ITEMS.map(item => (
+          {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
               onClick={() => setTab(item.id)}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-                tab === item.id
-                  ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                  : 'text-slate-500 hover:text-slate-200 hover:bg-white/[0.04]'
+                tab === item.id ? 'bg-blue-500/10 text-blue-300 border border-blue-500/20' : 'text-slate-500 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <item.icon className="w-4 h-4 flex-shrink-0" />
@@ -148,8 +167,8 @@ export default function AdminPage() {
 
         <div className="p-3">
           <div className="card p-3 text-xs text-slate-500 space-y-1">
-            <div className="flex items-center gap-1.5 text-green-400 font-semibold">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <div className="flex items-center gap-1.5 text-blue-300 font-semibold">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse" />
               Demo Mode Active
             </div>
             <p className="leading-relaxed">Data is simulated. Connect Supabase to go live.</p>
@@ -157,7 +176,6 @@ export default function AdminPage() {
         </div>
       </aside>
 
-      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/70" onClick={() => setSidebarOpen(false)} />
@@ -165,14 +183,20 @@ export default function AdminPage() {
             <button className="absolute top-4 right-4 text-slate-400" onClick={() => setSidebarOpen(false)}>
               <X className="w-4 h-4" />
             </button>
-            <div className="mb-4 mt-1 font-bold text-green-grad" style={{ fontFamily: 'Space Grotesk' }}>GreenField Admin</div>
-            {NAV_ITEMS.map(item => (
+            <div className="flex items-center gap-3 mt-1 mb-4">
+              <div className="w-8 h-8 rounded-xl bg-[linear-gradient(135deg,#2563eb,#f97316)] flex items-center justify-center">
+                <span className="text-white font-black text-xs">7★</span>
+              </div>
+              <div>
+                <div className="font-bold text-neni-grad" style={{ fontFamily: 'Space Grotesk' }}>NENI TURF</div>
+                <div className="text-[10px] uppercase tracking-[0.22em] text-slate-600">Admin</div>
+              </div>
+            </div>
+            {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => { setTab(item.id); setSidebarOpen(false) }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  tab === item.id ? 'bg-green-500/10 text-green-400' : 'text-slate-400 hover:text-white'
-                }`}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${tab === item.id ? 'bg-blue-500/10 text-blue-300' : 'text-slate-400 hover:text-white'}`}
               >
                 <item.icon className="w-4 h-4" />
                 {item.label}
@@ -182,9 +206,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── MAIN ── */}
       <div className="lg:ml-60 flex-1 min-h-screen flex flex-col">
-        {/* Topbar */}
         <header className="sticky top-0 z-30 bg-[#0c0e15]/90 backdrop-blur-xl border-b border-white/[0.06] px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button className="lg:hidden btn-ghost w-9 h-9 rounded-xl border border-white/[0.08]" onClick={() => setSidebarOpen(true)}>
@@ -192,157 +214,131 @@ export default function AdminPage() {
             </button>
             <div>
               <h1 className="font-bold text-sm sm:text-base capitalize">
-                {tab === 'overview' ? 'Business Overview' :
-                 tab === 'bookings' ? 'Booking Management' :
-                 tab === 'slots'    ? 'Slot Manager'       : 'Turf Settings'}
+                {tab === 'overview' ? 'Business Overview' : tab === 'bookings' ? 'Booking Management' : tab === 'slots' ? 'Slot Manager' : 'Turf Settings'}
               </h1>
               <p className="text-slate-500 text-[11px] hidden sm:block">
-                {format(new Date(), 'EEEE, d MMMM yyyy')} · GreenField Sports Arena, Chennai
+                {format(new Date(), 'EEEE, d MMMM yyyy')} · 7 NENI TURF, Chennai
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-green-500/15 border border-green-500/25 flex items-center justify-center text-[11px] font-bold text-green-400">
-              GF
+            <div className="w-8 h-8 rounded-full bg-blue-500/15 border border-blue-500/25 flex items-center justify-center text-[11px] font-bold text-blue-300">
+              7★
             </div>
           </div>
         </header>
 
-        {/* Content */}
         <main className="flex-1 p-4 sm:p-6 max-w-7xl w-full">
-
-          {/* ═══════════ OVERVIEW ═══════════ */}
           {tab === 'overview' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-
-              {/* KPI cards */}
               <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-                {kpis.map((k, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.07 }}
-                    className="card p-5"
-                  >
-                    <div className="label-upper mb-2">{k.label}</div>
-                    <div className={`text-2xl font-bold mb-1 ${k.color}`} style={{ fontFamily: 'Space Grotesk' }}>
-                      {k.value}
-                    </div>
-                    <div className="text-xs text-green-500 flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3" /> {k.sub}
+                {kpis.map((kpi, index) => (
+                  <motion.div key={kpi.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.07 }} className="card p-5">
+                    <div className="label-upper mb-2">{kpi.label}</div>
+                    <div className={`text-2xl font-bold mb-1 ${kpi.color}`} style={{ fontFamily: 'Space Grotesk' }}>{kpi.value}</div>
+                    <div className="text-xs text-blue-300 flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" /> {kpi.sub}
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Revenue chart */}
               <div className="card p-5 sm:p-6">
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between mb-5 gap-4 flex-wrap">
                   <div>
                     <h3 className="font-bold text-base">Revenue Analytics</h3>
-                    <p className="text-slate-400 text-xs mt-0.5">
-                      {chartView === 'weekly' ? 'This week' : 'This year'} · Demo data
-                    </p>
+                    <p className="text-slate-400 text-xs mt-0.5">{chartView === 'weekly' ? 'This week' : 'This year'} · Demo data</p>
                   </div>
                   <div className="flex gap-1 p-1 bg-white/[0.04] rounded-lg">
-                    {(['weekly','monthly'] as const).map(v => (
+                    {(['weekly', 'monthly'] as const).map((view) => (
                       <button
-                        key={v}
-                        onClick={() => setChartView(v)}
-                        className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all capitalize ${
-                          chartView === v ? 'bg-green-500/15 text-green-400' : 'text-slate-500 hover:text-slate-300'
-                        }`}
+                        key={view}
+                        onClick={() => setChartView(view)}
+                        className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all capitalize ${chartView === view ? 'bg-blue-500/15 text-blue-300' : 'text-slate-500 hover:text-slate-300'}`}
                       >
-                        {v}
+                        {view}
                       </button>
                     ))}
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={220}>
-                  <AreaChart data={(chartView === 'weekly' ? WEEKLY : MONTHLY) as any[]}>
+                  <AreaChart data={revenueChartData}>
                     <defs>
-                      <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#22c55e" stopOpacity={0.25} />
-                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0}    />
+                      <linearGradient id="adminRevenue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                    <XAxis dataKey={chartView === 'weekly' ? 'day' : 'month'} tick={{ fill:'#6b7280', fontSize:11 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill:'#6b7280', fontSize:10 }} axisLine={false} tickLine={false}
-                      tickFormatter={v => `₹${(v/1000).toFixed(0)}k`} />
+                    <XAxis dataKey="label" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: '#6b7280', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`} />
                     <Tooltip content={<ChartTip />} />
-                    <Area type="monotone" dataKey="revenue" stroke="#22c55e" strokeWidth={2} fill="url(#rg)" />
+                    <Area type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} fill="url(#adminRevenue)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Bottom row */}
               <div className="grid md:grid-cols-3 gap-5">
-                {/* Bookings bar */}
                 <div className="md:col-span-2 card p-5">
                   <h3 className="font-bold text-sm mb-4">Bookings This Week</h3>
                   <ResponsiveContainer width="100%" height={160}>
                     <BarChart data={WEEKLY} barSize={24}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                      <XAxis dataKey="day" tick={{ fill:'#6b7280', fontSize:11 }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fill:'#6b7280', fontSize:10 }} axisLine={false} tickLine={false} />
+                      <XAxis dataKey="day" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fill: '#6b7280', fontSize: 10 }} axisLine={false} tickLine={false} />
                       <Tooltip
-                        content={({ active, payload, label }) => active && payload?.length
-                          ? <div className="bg-[#181b27] border border-white/[0.08] rounded-xl px-3 py-2 text-xs">
-                              <p className="text-slate-400 mb-0.5">{label}</p>
-                              <p className="font-bold text-green-400">{payload[0]?.value} bookings</p>
-                            </div>
-                          : null
-                        }
+                        content={({ active, payload, label }) => active && payload?.length ? (
+                          <div className="bg-[#181b27] border border-white/[0.08] rounded-xl px-3 py-2 text-xs">
+                            <p className="text-slate-400 mb-0.5">{label}</p>
+                            <p className="font-bold text-blue-300">{payload[0]?.value} bookings</p>
+                          </div>
+                        ) : null}
                       />
-                      <Bar dataKey="bookings" fill="#22c55e" fillOpacity={0.75} radius={[5,5,0,0]} />
+                      <Bar dataKey="bookings" fill="#3b82f6" fillOpacity={0.8} radius={[5, 5, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Sport split pie */}
                 <div className="card p-5">
                   <h3 className="font-bold text-sm mb-4">Sport Split</h3>
                   <ResponsiveContainer width="100%" height={130}>
                     <PieChart>
                       <Pie data={SPORT_PIE} cx="50%" cy="50%" innerRadius={36} outerRadius={56} paddingAngle={4} dataKey="value">
-                        {SPORT_PIE.map((e, i) => <Cell key={i} fill={e.color} fillOpacity={0.85} />)}
+                        {SPORT_PIE.map((entry) => <Cell key={entry.name} fill={entry.color} fillOpacity={0.9} />)}
                       </Pie>
-                      <Tooltip formatter={(v: any) => [`${v} bookings`]} />
+                      <Tooltip formatter={(value) => [`${value ?? 0} bookings`]} />
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="space-y-2 mt-1">
-                    {SPORT_PIE.map(s => (
-                      <div key={s.name} className="flex items-center justify-between text-xs">
+                    {SPORT_PIE.map((sport) => (
+                      <div key={sport.name} className="flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-sm" style={{ background: s.color }} />
-                          <span className="text-slate-400">{s.name}</span>
+                          <div className="w-2.5 h-2.5 rounded-sm" style={{ background: sport.color }} />
+                          <span className="text-slate-400">{sport.name}</span>
                         </div>
-                        <span className="font-bold">{s.value}</span>
+                        <span className="font-bold">{sport.value}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Today's schedule */}
               <div className="card p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-sm">Today's Schedule</h3>
+                  <h3 className="font-bold text-sm">Today&apos;s Schedule</h3>
                   <span className="text-xs text-slate-500">{TODAY_SCHEDULE.length} bookings</span>
                 </div>
                 <div className="space-y-2">
-                  {TODAY_SCHEDULE.map((b, i) => (
-                    <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.05] transition-colors">
-                      <div className="text-xl w-8 text-center">{b.sport === 'cricket' ? '🏏' : '⚽'}</div>
+                  {TODAY_SCHEDULE.map((booking) => (
+                    <div key={booking.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.05] transition-colors">
+                      <div className="text-xl w-8 text-center">{booking.sport === 'cricket' ? '🏏' : '⚽'}</div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{b.name}</div>
-                        <div className="text-slate-500 text-xs">{formatTime(b.start)}</div>
+                        <div className="font-medium text-sm truncate">{booking.name}</div>
+                        <div className="text-slate-500 text-xs">{formatTime(booking.start)}</div>
                       </div>
                       <div className="text-[10px]"><span className="pill-confirmed">Confirmed</span></div>
-                      <div className="font-bold text-green-400 text-sm" style={{ fontFamily:'Space Grotesk' }}>
-                        ₹{b.amount.toLocaleString('en-IN')}
+                      <div className="font-bold text-blue-300 text-sm" style={{ fontFamily: 'Space Grotesk' }}>
+                        ₹{booking.amount.toLocaleString('en-IN')}
                       </div>
                     </div>
                   ))}
@@ -351,20 +347,17 @@ export default function AdminPage() {
             </motion.div>
           )}
 
-          {/* ═══════════ BOOKINGS ═══════════ */}
           {tab === 'bookings' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
               <div className="flex flex-wrap items-center gap-3">
                 <div className="flex gap-1 p-1 bg-white/[0.04] rounded-lg">
-                  {(['all','cricket','football'] as const).map(f => (
+                  {(['all', 'cricket', 'football'] as const).map((filter) => (
                     <button
-                      key={f}
-                      onClick={() => setSportFilter(f)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold capitalize transition-all ${
-                        sportFilter === f ? 'bg-green-500/15 text-green-400' : 'text-slate-500 hover:text-slate-300'
-                      }`}
+                      key={filter}
+                      onClick={() => setSportFilter(filter)}
+                      className={`px-3 py-1.5 rounded-md text-xs font-semibold capitalize transition-all ${sportFilter === filter ? 'bg-blue-500/15 text-blue-300' : 'text-slate-500 hover:text-slate-300'}`}
                     >
-                      {f === 'all' ? 'All' : f === 'cricket' ? '🏏 Cricket' : '⚽ Football'}
+                      {filter === 'all' ? 'All' : filter === 'cricket' ? '🏏 Cricket' : '⚽ Football'}
                     </button>
                   ))}
                 </div>
@@ -379,48 +372,35 @@ export default function AdminPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-white/[0.06]">
-                        {['Booking ID','Customer','Sport','Date','Time','Amount','Status','Action'].map(h => (
-                          <th key={h} className="text-left label-upper px-4 py-3 whitespace-nowrap">{h}</th>
+                        {['Booking ID', 'Customer', 'Sport', 'Date', 'Time', 'Amount', 'Status', 'Action'].map((heading) => (
+                          <th key={heading} className="text-left label-upper px-4 py-3 whitespace-nowrap">{heading}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {filtered.map((b, i) => (
-                        <motion.tr
-                          key={b.id}
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.04 }}
-                          className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors"
-                        >
-                          <td className="px-4 py-3 font-mono text-[11px] text-green-400 font-bold">{b.id}</td>
+                      {filtered.map((booking, index) => (
+                        <motion.tr key={booking.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.04 }} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                          <td className="px-4 py-3 font-mono text-[11px] text-blue-300 font-bold">{booking.id}</td>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-sm whitespace-nowrap">{b.name}</div>
-                            <div className="text-slate-500 text-[11px]">{b.email}</div>
+                            <div className="font-medium text-sm whitespace-nowrap">{booking.name}</div>
+                            <div className="text-slate-500 text-[11px]">{booking.email}</div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className={b.sport === 'cricket' ? 'badge-cricket' : 'badge-football'}>
-                              {b.sport === 'cricket' ? '🏏 Cricket' : '⚽ Football'}
+                            <span className={booking.sport === 'cricket' ? 'badge-cricket' : 'badge-football'}>
+                              {booking.sport === 'cricket' ? '🏏 Cricket' : '⚽ Football'}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">
-                            {format(new Date(b.date + 'T00:00:00'), 'd MMM yyyy')}
-                          </td>
-                          <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{formatTime(b.start)}</td>
-                          <td className="px-4 py-3 font-bold text-green-400 text-sm" style={{ fontFamily:'Space Grotesk' }}>
-                            ₹{b.amount.toLocaleString('en-IN')}
+                          <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{format(new Date(`${booking.date}T00:00:00`), 'd MMM yyyy')}</td>
+                          <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{formatTime(booking.start)}</td>
+                          <td className="px-4 py-3 font-bold text-blue-300 text-sm" style={{ fontFamily: 'Space Grotesk' }}>
+                            ₹{booking.amount.toLocaleString('en-IN')}
                           </td>
                           <td className="px-4 py-3">
-                            <span className={b.status === 'confirmed' ? 'pill-confirmed' : 'pill-cancelled'}>
-                              {b.status}
-                            </span>
+                            <span className={booking.status === 'confirmed' ? 'pill-confirmed' : 'pill-cancelled'}>{booking.status}</span>
                           </td>
                           <td className="px-4 py-3">
-                            {b.status === 'confirmed' && (
-                              <button
-                                onClick={() => toast.error('Confirmation required to cancel')}
-                                className="text-[11px] text-red-400/60 hover:text-red-400 border border-red-500/15 hover:border-red-500/30 px-2 py-0.5 rounded-full transition-colors"
-                              >
+                            {booking.status === 'confirmed' && (
+                              <button onClick={() => toast.error('Confirmation required to cancel')} className="text-[11px] text-red-400/60 hover:text-red-400 border border-red-500/15 hover:border-red-500/30 px-2 py-0.5 rounded-full transition-colors">
                                 Cancel
                               </button>
                             )}
@@ -434,59 +414,41 @@ export default function AdminPage() {
             </motion.div>
           )}
 
-          {/* ═══════════ SLOTS ═══════════ */}
           {tab === 'slots' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5 max-w-2xl">
-
-              {/* Turf toggle */}
               <div className="card p-5">
                 <h3 className="font-bold text-sm mb-1">Turf Status</h3>
                 <p className="text-slate-400 text-xs mb-4">Enable or disable all bookings</p>
                 <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/[0.07]">
                   <div>
-                    <div className="font-semibold text-sm">GreenField Cricket / Football</div>
-                    <div className={`text-xs mt-0.5 font-semibold ${turfOpen ? 'text-green-400' : 'text-red-400'}`}>
+                    <div className="font-semibold text-sm">7 NENI TURF · Cricket / Football</div>
+                    <div className={`text-xs mt-0.5 font-semibold ${turfOpen ? 'text-blue-300' : 'text-red-400'}`}>
                       {turfOpen ? '● Live – Bookings Open' : '● Closed – No Bookings'}
                     </div>
                   </div>
-                  <button
-                    onClick={() => { setTurfOpen(!turfOpen); toast.success(turfOpen ? 'Turf closed' : 'Turf opened!') }}
-                    className="transition-all duration-200 hover:scale-105"
-                  >
-                    {turfOpen
-                      ? <ToggleRight className="w-12 h-8 text-green-400" />
-                      : <ToggleLeft  className="w-12 h-8 text-slate-600" />
-                    }
+                  <button onClick={() => { setTurfOpen(!turfOpen); toast.success(turfOpen ? 'Turf closed' : 'Turf opened!') }} className="transition-all duration-200 hover:scale-105">
+                    {turfOpen ? <ToggleRight className="w-12 h-8 text-blue-300" /> : <ToggleLeft className="w-12 h-8 text-slate-600" />}
                   </button>
                 </div>
               </div>
 
-              {/* Block/Unblock grid */}
               <div className="card p-5">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="font-bold text-sm">Slot Block Manager</h3>
-                  <button
-                    onClick={() => { setBlockedHours([6, 22]); toast.success('Reset to default') }}
-                    className="btn-ghost text-[11px] gap-1"
-                  >
+                  <button onClick={() => { setBlockedHours([6, 22]); toast.success('Reset to default') }} className="btn-ghost text-[11px] gap-1">
                     <RefreshCw className="w-3 h-3" /> Reset
                   </button>
                 </div>
                 <p className="text-slate-400 text-xs mb-4">Click any slot to toggle its status</p>
-
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
-                  {Array.from({ length: 17 }, (_, i) => i + 6).map(h => {
-                    const isBlocked = blockedHours.includes(h)
-                    const label = `${h > 12 ? h - 12 : h}:00 ${h >= 12 ? 'PM' : 'AM'}`
+                  {Array.from({ length: 17 }, (_, index) => index + 6).map((hour) => {
+                    const isBlocked = blockedHours.includes(hour)
+                    const label = `${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'}`
                     return (
                       <button
-                        key={h}
-                        onClick={() => toggleHour(h)}
-                        className={`p-3 rounded-xl border-2 text-center transition-all duration-150 ${
-                          isBlocked
-                            ? 'border-red-500/35 bg-red-500/10 text-red-400 hover:bg-red-500/15'
-                            : 'border-green-500/30 bg-green-500/[0.07] text-green-400 hover:bg-green-500/15'
-                        }`}
+                        key={hour}
+                        onClick={() => toggleHour(hour)}
+                        className={`p-3 rounded-xl border-2 text-center transition-all duration-150 ${isBlocked ? 'border-red-500/35 bg-red-500/10 text-red-400 hover:bg-red-500/15' : 'border-blue-500/30 bg-blue-500/[0.07] text-blue-300 hover:bg-blue-500/15'}`}
                       >
                         <div className="text-base mb-0.5">{isBlocked ? '🔒' : '✓'}</div>
                         <div className="font-bold text-xs">{label}</div>
@@ -497,28 +459,27 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Utilization */}
               <div className="card p-5">
-                <h3 className="font-bold text-sm mb-4">Today's Utilization</h3>
+                <h3 className="font-bold text-sm mb-4">Today&apos;s Utilization</h3>
                 <div className="space-y-3 text-sm">
                   {[
                     { label: 'Total slots', value: 17 },
-                    { label: 'Booked',      value: 8, color: 'text-green-400' },
-                    { label: 'Available',   value: 7, color: 'text-blue-400' },
-                    { label: 'Blocked',     value: blockedHours.length, color: 'text-slate-500' },
-                  ].map(r => (
-                    <div key={r.label} className="flex justify-between">
-                      <span className="text-slate-400">{r.label}</span>
-                      <span className={`font-bold ${r.color || ''}`}>{r.value}</span>
+                    { label: 'Booked', value: 8, color: 'text-blue-300' },
+                    { label: 'Available', value: 7, color: 'text-orange-300' },
+                    { label: 'Blocked', value: blockedHours.length, color: 'text-slate-500' },
+                  ].map((row) => (
+                    <div key={row.label} className="flex justify-between">
+                      <span className="text-slate-400">{row.label}</span>
+                      <span className={`font-bold ${row.color || ''}`}>{row.value}</span>
                     </div>
                   ))}
                   <div className="pt-3 border-t border-white/[0.06]">
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-slate-400">Utilization Rate</span>
-                      <span className="font-bold text-green-400">47%</span>
+                      <span className="font-bold text-blue-300">47%</span>
                     </div>
                     <div className="h-2 bg-white/[0.07] rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-green-600 to-green-400 rounded-full transition-all duration-500" style={{ width: '47%' }} />
+                      <div className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,#2563eb,#f97316)]" style={{ width: '47%' }} />
                     </div>
                   </div>
                 </div>
@@ -526,26 +487,19 @@ export default function AdminPage() {
             </motion.div>
           )}
 
-          {/* ═══════════ SETTINGS ═══════════ */}
           {tab === 'settings' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5 max-w-xl">
-
               <div className="card p-5">
                 <h3 className="font-bold text-sm mb-1">Opening Hours</h3>
                 <p className="text-slate-400 text-xs mb-4">Set when your turf accepts bookings</p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: 'Opening Time', val: openTime, set: setOpenTime },
-                    { label: 'Closing Time', val: closeTime, set: setCloseTime },
-                  ].map(({ label, val, set }) => (
-                    <div key={label}>
-                      <div className="label-upper mb-2">{label}</div>
-                      <input
-                        type="time"
-                        value={val}
-                        onChange={e => set(e.target.value)}
-                        className="input-dark"
-                      />
+                    { label: 'Opening Time', value: openTime, setter: setOpenTime },
+                    { label: 'Closing Time', value: closeTime, setter: setCloseTime },
+                  ].map((field) => (
+                    <div key={field.label}>
+                      <div className="label-upper mb-2">{field.label}</div>
+                      <input type="time" value={field.value} onChange={(event) => field.setter(event.target.value)} className="input-dark" />
                     </div>
                   ))}
                 </div>
@@ -555,18 +509,14 @@ export default function AdminPage() {
                 <h3 className="font-bold text-sm mb-1">Slot Duration</h3>
                 <p className="text-slate-400 text-xs mb-4">How long is each bookable slot?</p>
                 <div className="grid grid-cols-4 gap-2.5">
-                  {[30, 60, 90, 120].map(d => (
+                  {[30, 60, 90, 120].map((minutes) => (
                     <button
-                      key={d}
-                      onClick={() => setDuration(d)}
-                      className={`py-3 rounded-xl border-2 text-center transition-all duration-150 ${
-                        duration === d
-                          ? 'border-green-500 bg-green-500/10 text-green-400'
-                          : 'border-white/[0.07] text-slate-400 hover:border-white/20'
-                      }`}
+                      key={minutes}
+                      onClick={() => setDuration(minutes)}
+                      className={`py-3 rounded-xl border-2 text-center transition-all duration-150 ${duration === minutes ? 'border-blue-500 bg-blue-500/10 text-blue-300' : 'border-white/[0.07] text-slate-400 hover:border-white/20'}`}
                     >
-                      <div className="font-bold text-sm">{d} min</div>
-                      <div className="text-[10px] opacity-60">{d < 60 ? '½ hr' : `${d/60} hr`}</div>
+                      <div className="font-bold text-sm">{minutes} min</div>
+                      <div className="text-[10px] opacity-60">{minutes < 60 ? '½ hr' : `${minutes / 60} hr`}</div>
                     </button>
                   ))}
                 </div>
@@ -576,18 +526,14 @@ export default function AdminPage() {
                 <h3 className="font-bold text-sm mb-1">Pricing</h3>
                 <p className="text-slate-400 text-xs mb-4">Per hour rate, GST included</p>
                 <div className="space-y-4">
-                  {[{ emoji: '🏏', label: 'Cricket' }, { emoji: '⚽', label: 'Football' }].map(s => (
-                    <div key={s.label} className="flex items-center justify-between gap-4">
+                  {[{ emoji: '🏏', label: 'Cricket' }, { emoji: '⚽', label: 'Football' }].map((sport) => (
+                    <div key={sport.label} className="flex items-center justify-between gap-4">
                       <span className="flex items-center gap-2 text-sm font-medium">
-                        <span className="text-xl">{s.emoji}</span> {s.label}
+                        <span className="text-xl">{sport.emoji}</span> {sport.label}
                       </span>
                       <div className="flex items-center gap-2">
                         <span className="text-slate-400 font-bold">₹</span>
-                        <input
-                          type="number"
-                          defaultValue={800}
-                          className="w-24 input-dark text-right text-sm py-2"
-                        />
+                        <input type="number" defaultValue={800} className="w-24 input-dark text-right text-sm py-2" />
                         <span className="text-slate-500 text-sm">/hr</span>
                       </div>
                     </div>
@@ -599,28 +545,21 @@ export default function AdminPage() {
                 <h3 className="font-bold text-sm mb-3">Payment Gateway</h3>
                 <div className="space-y-2 text-sm">
                   {[
-                    { label: 'Stripe Status', value: '✓ Connected (Test Mode)', green: true },
-                    { label: 'Webhook',        value: '✓ Active',                green: true },
-                    { label: 'UPI Enabled',    value: '✓ PhonePe / GPay / Paytm', green: true },
-                    { label: 'Currency',       value: 'INR (Indian Rupee ₹)' },
-                  ].map(r => (
-                    <div key={r.label} className="flex justify-between items-center py-2 border-b border-white/[0.05] last:border-0">
-                      <span className="text-slate-400">{r.label}</span>
-                      <span className={`font-semibold text-xs ${r.green ? 'text-green-400' : 'text-slate-300'}`}>{r.value}</span>
+                    { label: 'Stripe Status', value: '✓ Connected (Test Mode)', active: true },
+                    { label: 'Webhook', value: '✓ Active', active: true },
+                    { label: 'UPI Enabled', value: '✓ PhonePe / GPay / Paytm', active: true },
+                    { label: 'Currency', value: 'INR (Indian Rupee ₹)' },
+                  ].map((row) => (
+                    <div key={row.label} className="flex justify-between items-center py-2 border-b border-white/[0.05] last:border-0">
+                      <span className="text-slate-400">{row.label}</span>
+                      <span className={`font-semibold text-xs ${row.active ? 'text-blue-300' : 'text-slate-300'}`}>{row.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="btn-green w-full py-3.5 text-base gap-2.5"
-              >
-                {saving
-                  ? <><RefreshCw className="w-4 h-4 animate-spin" /> Saving...</>
-                  : <><CheckCircle className="w-4 h-4" /> Save Settings</>
-                }
+              <button onClick={handleSave} disabled={saving} className="btn-green w-full py-3.5 text-base gap-2.5">
+                {saving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Saving...</> : <><CheckCircle className="w-4 h-4" /> Save Settings</>}
               </button>
             </motion.div>
           )}

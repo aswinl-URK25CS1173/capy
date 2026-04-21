@@ -3,13 +3,14 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: 'GreenField Sports Arena | Cricket & Football Turf Booking – Chennai',
-  description: "Chennai's premier Cricket & Football turf. Book your slot online in real-time with instant confirmation and secure UPI/Card payment. Located in Anna Nagar.",
-  keywords: 'turf booking Chennai, cricket ground Chennai, football ground Anna Nagar, box cricket booking, turf booking online',
+  title: '7 NENI TURF | Cricket & Football Turf Booking – Chennai',
+  description: '7 NENI TURF is Chennai\'s premium cricket and football turf booking destination. Reserve slots instantly, pay securely, and play where champions are made.',
+  keywords: '7 NENI TURF, turf booking Chennai, cricket turf Chennai, football turf Chennai, sports turf Anna Nagar, turf booking online',
   openGraph: {
-    title: 'GreenField Sports Arena',
-    description: 'Book your cricket or football slot instantly. Real-time availability.',
+    title: '7 NENI TURF | Cricket & Football Turf Booking – Chennai',
+    description: 'Book cricket and football slots instantly at 7 NENI TURF in Chennai. Premium turf, instant confirmation, champion-level atmosphere.',
     locale: 'en_IN',
+    siteName: '7 NENI TURF',
   },
 }
 
@@ -33,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: '13px',
             },
-            success: { iconTheme: { primary: '#22c55e', secondary: '#0a0a0f' } },
-            error:   { iconTheme: { primary: '#ef4444', secondary: '#0a0a0f' } },
+            success: { iconTheme: { primary: '#3b82f6', secondary: '#0a0a0f' } },
+            error: { iconTheme: { primary: '#ef4444', secondary: '#0a0a0f' } },
           }}
         />
       </body>
